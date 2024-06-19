@@ -1,0 +1,94 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-dialog {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.brand-text {
+  font-weight: bold;
+  font-size: 1.5rem; /* Atur ukuran sesuai kebutuhan Anda */
+  color: #AF322F;
+  margin-left: 10px; /* Tambahkan sedikit margin kiri agar tidak terlalu dekat dengan logo */
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .navbar-brand {
+    justify-content: flex-start;
+  }
+}
+
+.welcome-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.welcome-message {
+  font-size: 2rem;
+}
+
+.manage-message {
+  font-size: 1.2rem;
+  color: grey;
+}
+
+
+/* styles/globals.css */
+.modal-backdrop {
+  z-index: 1040 !important;
+}
+.modal-content {
+  z-index: 1050 !important;
+}
+.modal {
+  display: block !important;
+}
+.modal-dialog {
+  margin-top: 10vh;
+}
+
+
