@@ -1,0 +1,25 @@
+{
+  "name": "chilifit-capstone-backend",
+  "version": "1.0.0",
+  "description": "Backend for ChiliFit Capstone Project",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google-cloud/storage": "^7.11.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "hapi": "^18.1.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.10.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
