@@ -1,5 +1,5 @@
 const { uploadFile } = require('../services/storageService');
-const { insertArticle, getArticles, updateArticle, deleteArticle, getArticlesByPrediction } = require('../models/articleModel');
+const { insertArticle, getArticles, updateArticle, deleteArticle, getArticlesByPrediction, getArticleById } = require('../models/articleModel');
 
 const postArticle = async (req, res) => {
   try {
@@ -44,8 +44,22 @@ const updateArticleById = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description } = req.body;
+    const file = req.file;
 
-    await updateArticle(id, title, description);
+    const article = await getArticleById(id);
+    if (!article) {
+      return res.status(404).send({ error: 'Article not found' });
+    }
+
+    let imageUrl = article.image_url;
+    if (file) {
+      imageUrl = await uploadFile(file);
+    }
+
+    const updatedTitle = title || article.title;
+    const updatedDescription = description || article.description;
+
+    await updateArticle(id, updatedTitle, updatedDescription, imageUrl);
     res.status(200).send({ status: 'success', message: 'Article updated successfully' });
   } catch (error) {
     res.status(500).send({ error: error.message });

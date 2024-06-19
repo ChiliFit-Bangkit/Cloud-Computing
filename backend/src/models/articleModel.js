@@ -33,11 +33,27 @@ const getArticles = (offset, limit) => {
   });
 };
 
-const updateArticle = (id, title, description) => {
+const getArticleById = (id) => {
   return new Promise((resolve, reject) => {
     db.query(
-      'UPDATE articles SET title = ?, description = ? WHERE id = ?',
-      [title, description, id],
+      'SELECT * FROM articles WHERE id = ?',
+      [id],
+      (error, results) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results[0]);
+        }
+      }
+    );
+  });
+};
+
+const updateArticle = (id, title, description, imageUrl) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE articles SET title = ?, description = ?, image_url = ? WHERE id = ?',
+      [title, description, imageUrl, id],
       (error) => {
         if (error) {
           reject(error);
@@ -81,4 +97,4 @@ const getArticlesByPrediction = (predictionResult, offset, limit) => {
   });
 };
 
-module.exports = { insertArticle, getArticles, updateArticle, deleteArticle, getArticlesByPrediction };
+module.exports = { insertArticle, getArticles, getArticleById, updateArticle, deleteArticle, getArticlesByPrediction };

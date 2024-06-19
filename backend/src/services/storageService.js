@@ -7,10 +7,17 @@ const bucketName = process.env.BUCKET_NAME;
 
 const uploadFile = async (file) => {
   const blob = storage.bucket(bucketName).file(file.originalname);
-  const blobStream = blob.createWriteStream();
+  const blobStream = blob.createWriteStream({
+    resumable: false,
+    gzip: true,
+    metadata: {
+      cacheControl: 'public, max-age=31536000',
+    },
+  });
 
   return new Promise((resolve, reject) => {
     blobStream.on('error', err => {
+      console.error('Error uploading file:', err);
       reject(err);
     });
 
@@ -23,4 +30,15 @@ const uploadFile = async (file) => {
   });
 };
 
-module.exports = { uploadFile };
+const deleteFile = async (fileUrl) => {
+  try {
+    const fileName = path.basename(fileUrl);
+    await storage.bucket(bucketName).file(fileName).delete();
+    console.log(`File ${fileName} deleted successfully.`);
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    throw new Error('Error deleting file');
+  }
+};
+
+module.exports = { uploadFile, deleteFile };
