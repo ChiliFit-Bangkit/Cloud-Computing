@@ -1,5 +1,5 @@
-const { uploadFile } = require('../services/storageService');
-const { insertPrediction, getPredictions, updatePrediction, deletePrediction } = require('../services/databaseService');
+const { uploadFile, deleteFile } = require('../services/storageService');
+const { insertPrediction, getPredictions, updatePrediction, deletePrediction, getPredictionById } = require('../models/predictionModel');
 
 const postPrediction = async (req, res) => {
   try {
@@ -29,9 +29,7 @@ const postPrediction = async (req, res) => {
 
 const getAllPredictions = async (req, res) => {
   try {
-    const { page = 1, size = 10 } = req.query;
-    const offset = (page - 1) * size;
-    const predictions = await getPredictions(offset, parseInt(size));
+    const predictions = await getPredictions();
 
     res.status(200).send({ status: 'success', data: predictions });
   } catch (error) {
@@ -55,6 +53,12 @@ const deletePredictionById = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const prediction = await getPredictionById(id);
+    if (!prediction) {
+      return res.status(404).send({ error: 'Prediction not found' });
+    }
+
+    await deleteFile(prediction.image_url);
     await deletePrediction(id);
     res.status(200).send({ status: 'success', message: 'Prediction deleted successfully' });
   } catch (error) {

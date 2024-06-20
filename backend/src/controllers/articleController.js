@@ -1,4 +1,4 @@
-const { uploadFile } = require('../services/storageService');
+const { uploadFile, deleteFile } = require('../services/storageService');
 const { insertArticle, getArticles, updateArticle, deleteArticle, getArticlesByPrediction, getArticleById } = require('../models/articleModel');
 
 const postArticle = async (req, res) => {
@@ -30,9 +30,7 @@ const postArticle = async (req, res) => {
 
 const getAllArticles = async (req, res) => {
   try {
-    const { page = 1, size = 10 } = req.query;
-    const offset = (page - 1) * size;
-    const articles = await getArticles(offset, parseInt(size));
+    const articles = await getArticles();
 
     res.status(200).send({ status: 'success', data: articles });
   } catch (error) {
@@ -53,6 +51,7 @@ const updateArticleById = async (req, res) => {
 
     let imageUrl = article.image_url;
     if (file) {
+      await deleteFile(article.image_url);
       imageUrl = await uploadFile(file);
     }
 
@@ -69,7 +68,13 @@ const updateArticleById = async (req, res) => {
 const deleteArticleById = async (req, res) => {
   try {
     const { id } = req.params;
+    const article = await getArticleById(id);
 
+    if (!article) {
+      return res.status(404).send({ error: 'Article not found' });
+    }
+
+    await deleteFile(article.image_url);
     await deleteArticle(id);
     res.status(200).send({ status: 'success', message: 'Article deleted successfully' });
   } catch (error) {
@@ -80,9 +85,7 @@ const deleteArticleById = async (req, res) => {
 const getArticlesRelatedToPrediction = async (req, res) => {
   try {
     const { prediction_result } = req.query;
-    const { page = 1, size = 10 } = req.query;
-    const offset = (page - 1) * size;
-    const articles = await getArticlesByPrediction(prediction_result, offset, parseInt(size));
+    const articles = await getArticlesByPrediction(prediction_result);
 
     res.status(200).send({ status: 'success', data: articles });
   } catch (error) {

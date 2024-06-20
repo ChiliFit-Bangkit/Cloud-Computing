@@ -17,11 +17,10 @@ const insertArticle = (title, description, imageUrl) => {
   });
 };
 
-const getArticles = (offset, limit) => {
+const getArticles = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM articles LIMIT ? OFFSET ?',
-      [limit, offset],
+      'SELECT * FROM articles',
       (error, results) => {
         if (error) {
           reject(error);
@@ -81,11 +80,11 @@ const deleteArticle = (id) => {
   });
 };
 
-const getArticlesByPrediction = (predictionResult, offset, limit) => {
+const getArticlesByPrediction = (predictionResult) => {
   return new Promise((resolve, reject) => {
     db.query(
-      'SELECT * FROM articles WHERE title LIKE ? LIMIT ? OFFSET ?',
-      [`%${predictionResult}%`, limit, offset],
+      'SELECT * FROM articles WHERE title LIKE ?',
+      [`%${predictionResult}%`],
       (error, results) => {
         if (error) {
           reject(error);
